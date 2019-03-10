@@ -1,0 +1,8 @@
+flask==1.0.2
+numpy>=1.15.0
+scipy>=1.1.0
+pandas>=0.24.1
+scikit-learn==0.20.3
+nltk ==3.4
+flask_restful == 0.3.7
+gunicorn==19.9.0
