@@ -6,13 +6,13 @@ from flask_restful import Resource, Api
 # import sklearn
 from sklearn.externals import joblib
 from nltk.corpus import stopwords
-
+import nltk
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 # from search import Search
-
+nltk.download('stopwords')
 
 # class Stemming:
 #     def __init__(self,arg):
@@ -43,15 +43,17 @@ from sklearn.metrics.pairwise import cosine_similarity
 def stemming(text):
     return (english_stemmer.stem(w) for w in analyzer(text))
 stop_words = stopwords.words('english')
-books = pd.read_csv("/home/abhishek/Abe/Datasets/final_dataset.csv")
+books = pd.read_csv("gs://dataset_models/final_dataset.csv")
 books.fillna("",inplace=True)
 english_stemmer = SnowballStemmer('english')
 analyzer = CountVectorizer().build_analyzer()
+
 # step = Stemming("start")
 # count = CountVectorizer(analyzer=stemming)
 # count_matrix = count.fit_transform(books['all_text'])
 # tfidf_transformer = TfidfTransformer()
 # trained_tfidf = tfidf_transformer.fit_transform(count_matrix)
+
 model_directory = 'gs://dataset_models'
 count_file = f'{model_directory}/document_term_matrix.pkl'
 tfidf_file = f'{model_directory}/tfidf.pkl'
@@ -121,10 +123,9 @@ class Search(Resource):
 
 app = Flask(__name__)
 api = Api(app)
-# books = pd.read_csv("/home/abhishek/Abe/Datasets/final_dataset.csv")
 api.add_resource(Search,"/search/<string:query>",resource_class_kwargs={"books":books,"trained_tfidf":trained_tfidf,"count":count,"tfidf":tfidf})
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     # stemming("doggy heavenly")
     # start = Initial_process("start")
     # count = joblib.load(count_file)
@@ -134,4 +135,4 @@ api.add_resource(Search,"/search/<string:query>",resource_class_kwargs={"books":
     # print(type(books),type(trained_tfidf))
     # start.get_started()
 
-    # app.run()
+    app.run(debug=True)
