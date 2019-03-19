@@ -1,6 +1,8 @@
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 from flask import Flask
+import gcsfs
+
 # from flask_restful import Api
 from flask_restful import Resource, Api
 # import sklearn
@@ -13,7 +15,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 # from search import Search
 nltk.download('stopwords')
-
+fs = gcsfs.GCSFileSystem(project='Recommender-System')
 # class Stemming:
 #     def __init__(self,arg):
 #         self.arg = arg
@@ -43,8 +45,12 @@ nltk.download('stopwords')
 def stemming(text):
     return (english_stemmer.stem(w) for w in analyzer(text))
 stop_words = stopwords.words('english')
-books = pd.read_csv("gs://dataset_models/final_dataset.csv")
-books.fillna("",inplace=True)
+# fileobj = get_byte_fileobj('my-project', 'my-bucket', 'my-path')
+# df = pd.read_csv(fileobj)
+# books = pd.read_csv("gs://dataset_models/final_dataset.csv")
+with fs.open('dataset_models/final_dataset.csv') as f:
+    books = pd.read_csv(f)
+# books.fillna("",inplace=True)
 english_stemmer = SnowballStemmer('english')
 analyzer = CountVectorizer().build_analyzer()
 
@@ -125,7 +131,7 @@ app = Flask(__name__)
 api = Api(app)
 api.add_resource(Search,"/search/<string:query>",resource_class_kwargs={"books":books,"trained_tfidf":trained_tfidf,"count":count,"tfidf":tfidf})
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # stemming("doggy heavenly")
     # start = Initial_process("start")
     # count = joblib.load(count_file)
@@ -135,4 +141,4 @@ if __name__ == "__main__":
     # print(type(books),type(trained_tfidf))
     # start.get_started()
 
-    app.run(debug=True)
+    # app.run(debug=True)

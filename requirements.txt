@@ -6,3 +6,4 @@ scikit-learn==0.20.3
 nltk ==3.4
 flask_restful == 0.3.7
 gunicorn==19.9.0
+gcsfs >= 0.1
