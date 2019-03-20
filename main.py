@@ -47,9 +47,9 @@ def stemming(text):
 stop_words = stopwords.words('english')
 # fileobj = get_byte_fileobj('my-project', 'my-bucket', 'my-path')
 # df = pd.read_csv(fileobj)
-# books = pd.read_csv("gs://dataset_models/final_dataset.csv")
-with fs.open('dataset_models/final_dataset.csv') as f:
-    books = pd.read_csv(f)
+books = pd.read_csv("gs://dataset_models/final_dataset.csv")
+# with fs.open('dataset_models/final_dataset.csv') as f:
+#     books = pd.read_csv(f)
 # books.fillna("",inplace=True)
 english_stemmer = SnowballStemmer('english')
 analyzer = CountVectorizer().build_analyzer()
