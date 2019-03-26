@@ -1,4 +1,4 @@
-entrypoint: gunicorn -b :$PORT main:app
+entrypoint: gunicorn -b :$PORT main:app --timeout 200
 runtime: python
 env: flex
 
@@ -25,4 +25,4 @@ readiness_check:
   timeout_sec: 40
   failure_threshold: 5
   success_threshold: 5
-  app_start_timeout_sec: 2500
+  app_start_timeout_sec: 3500
